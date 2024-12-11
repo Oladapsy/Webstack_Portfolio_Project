@@ -7,13 +7,13 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    items = ItemSerializer(many=True)
-
+    items = ItemSerializer(many=True, read_only=True)
+    
     class Meta:
         model = Invoice
-        fields = ['id', 'invoice_number', 'client', 'total_amount', 'status', 'due_date', 'items']
+        fields = '__all__'
 
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ['id', 'company_name', 'email']
+        fields = '__all__'

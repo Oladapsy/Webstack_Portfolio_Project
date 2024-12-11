@@ -6,14 +6,14 @@ from .models import Client, Invoice, Item
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ("company_name", "email") # fields to show in the admin list view
-    search_fields = ("company_name", "email") # enable searching by name or email
-    odering = ("company_name") # order alphabetically by name
+    list_display = ("name", "email") # fields to show in the admin list view
+    search_fields = ("name", "email") # enable searching by name or email
+    odering = ("name") # order alphabetically by name
 
 @admin.register(Invoice)
 class InvoiceAsmin(admin.ModelAdmin):
     list_display = ("invoice_number", "client", "total_amount", "due_date", "status")
-    search_fields = ("invoice_number", "client__company_name")
+    search_fields = ("invoice_number", "client__name")
     list_filter = ("due_date",)
     ordering = ("due_date",)
 

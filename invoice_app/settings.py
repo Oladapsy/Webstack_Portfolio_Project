@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+# created for me
+from datetime import timedelta
+from dotenv import load_dotenv
+import os
+
+# to load environmental variables to save
+# credentials for database and other credentials
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +34,8 @@ SECRET_KEY = 'django-insecure-ap4!d7pj41vg8f074dyg(coo(gqs5_#2z$ipbxn_k^f#@1j#8p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# allow other host to load our Django project
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -41,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework', # django rest framework for serving api
     'rest_framework.authtoken', # for token based authentication
     'users', # the user app for its authentication
+    'corsheaders' # cros origin header
 ]
 
 MIDDLEWARE = [
@@ -51,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # add for cors middle ware
 ]
 
 ROOT_URLCONF = 'invoice_app.urls'
@@ -85,6 +97,14 @@ DATABASES = {
         'PASSWORD': '1234',  # Your MySQL password
         'HOST': 'localhost',  # Default is localhost
         'PORT': '3306',  # Default MySQL port
+    },
+    'test': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'test_invoice_db',
+         'USER': 'invoice_user',
+         'PASSWORD': '1234',
+         'HOST': 'localhost',
+         'PORT': '3306',
     }
 }
 
@@ -137,3 +157,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+# we allow all origin but we are suppose
+# to just allow one but lets do all
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWS_CREDENTIALS = True
