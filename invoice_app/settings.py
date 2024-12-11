@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'invoices', # my first app
     'rest_framework', # django rest framework for serving api
     'rest_framework.authtoken', # for token based authentication
+    'users', # the user app for its authentication
 ]
 
 MIDDLEWARE = [
@@ -87,6 +88,8 @@ DATABASES = {
     }
 }
 
+# custom user model
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -128,3 +131,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
