@@ -1,17 +1,12 @@
-from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Client, Invoice, Item
-from .serializers import ClientSerializer, InvoiceSerializer, ItemSerializer
+from .models import UnifiedModel
+from .serializers import UnifiedModelSerializer
+from rest_framework.permissions import IsAuthenticated
 
-# Create your views here.
-class ClientViewSet(viewsets.ModelViewSet):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
+class UnifiedModelViewSet(viewsets.ModelViewSet):
+    queryset = UnifiedModel.objects.all()
+    serializer_class = UnifiedModelSerializer
+    permission_classes = [IsAuthenticated]
 
-class InvoiceViewSet(viewsets.ModelViewSet):
-        queryset = Invoice.objects.all()
-        serializer_class = InvoiceSerializer
-
-class ItemViewSet(viewsets.ModelViewSet):
-        queryset = Item.objects.all()
-        serializer_class = ItemSerializer
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

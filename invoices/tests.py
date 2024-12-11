@@ -1,35 +1,33 @@
 from django.test import TestCase
-from .models import Client, Invoice, Item
-from django.utils import timezone
+from rest_framework.test import APITestCase
+from rest_framework import status
+from django.urls import reverse
+from users.models import CustomUser
+from .models import UnifiedModel
 
-
-# Create your tests here.
-
-class ClientModelTest(TestCase):
+class UnifiedModelTest(APITestCase):
     def setUp(self):
-        Client.objects.create(name="John Doe", email="john.doe@example.com", address="123 Elm Street")
-
-    def test_client_creation(self):
-        client = Client.objects.get(name="John Doe")
-        self.assertEqual(client.email, "john.doe@example.com")
-        self.assertEqual(client.address, "123 Elm Street")
-
-class InvoiceModelTest(TestCase):
-    def setUp(self):
-        client = Client.objects.create(name="Jane Smith", email="jane.smith@example.com", address="456 Oak Street")
-        Invoice.objects.create(client=client, invoice_number="INV001", due_date=timezone.now())
+        self.user = CustomUser.objects.create_user(username='john.doe', email='john.doe@example.com', password='password123', full_name='John Doe')
+        self.client.force_authenticate(user=self.user)
+        self.data = {
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "address": "123 Elm Street",
+            "phone_number": "123-456-7890",
+            "item_title": "Widget",
+            "quantity": 10,
+            "price": 5.00,
+            "date_issued": "2023-12-15",
+            "due_date": "2024-01-15",
+            "description": "Consulting Services",
+            "status": "Pending"
+        }
 
     def test_invoice_creation(self):
-        invoice = Invoice.objects.get(invoice_number="INV001")
-        self.assertEqual(invoice.client.name, "Jane Smith")
+        response = self.client.post(reverse('unifiedmodel-list'), self.data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['user'], self.user.username)
 
-class ItemModelTest(TestCase):
-    def setUp(self):
-        client = Client.objects.create(name="John Doe", email="john.doe@example.com", address="123 Elm Street")
-        invoice = Invoice.objects.create(client=client, invoice_number="INV002", due_date=timezone.now())
-        Item.objects.create(invoice=invoice, title="Widget", quantity=10, price=5.00)
-
-    def test_item_creation(self):
-        item = Item.objects.get(title="Widget")
-        self.assertEqual(item.quantity, 10)
-        self.assertEqual(item.price, 5.00)
+    def test_total_amount_calculation(self):
+        unified_instance = UnifiedModel.objects.create(user=self.user, **self.data)
+        self.assertEqual(unified_instance.total_amount, 50.00)

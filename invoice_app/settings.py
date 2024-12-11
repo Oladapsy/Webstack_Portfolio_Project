@@ -162,3 +162,4 @@ REST_FRAMEWORK = {
 # to just allow one but lets do all
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True

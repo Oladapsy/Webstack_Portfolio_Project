@@ -17,7 +17,7 @@ class UserSignupViewTest(APITestCase):
         self.user_data = {
             'email': 'jane.doe@example.com',
             'full_name': 'Jane Doe',
-            'username': 'jane.doe',  # Ensure to provide username
+            'username': 'jane.doe',
             'password': 'password123'
         }
 

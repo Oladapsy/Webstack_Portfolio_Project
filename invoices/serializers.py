@@ -1,19 +1,23 @@
 from rest_framework import serializers
-from .models import Client, Invoice, Item
+from .models import UnifiedModel
 
-class ItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Item
-        fields = '__all__'
+class UnifiedModelSerializer(serializers.ModelSerializer):
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    user = serializers.ReadOnlyField(source='user.username')
 
-class InvoiceSerializer(serializers.ModelSerializer):
-    items = ItemSerializer(many=True, read_only=True)
-    
     class Meta:
-        model = Invoice
-        fields = '__all__'
+        model = UnifiedModel
+        fields = [
+            'id', 'user', 'name', 'email', 'address', 'phone_number',
+            'invoice_number', 'date_issued', 'due_date', 'description', 'status',
+            'item_title', 'quantity', 'price', 'total_amount'
+        ]
+        read_only_fields = ['invoice_number', 'total_amount', 'user']
 
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Client
-        fields = '__all__'
+    def create(self, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            validated_data['user'] = request.user
+        if not validated_data.get('invoice_number'):
+            validated_data['invoice_number'] = self.Meta.model().generate_invoice_number()
+        return super().create(validated_data)
