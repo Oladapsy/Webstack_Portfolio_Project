@@ -1,10 +1,7 @@
-# users serialization
-
 from rest_framework import serializers
 from .models import CustomUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
-
 
 class UserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -17,8 +14,6 @@ class UserSignupSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
 
-
-#login serializer
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
@@ -28,7 +23,6 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError("Invalid login credentials")
         return user
-
 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
