@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'rest_framework', # django rest framework for serving api
     'rest_framework.authtoken', # for token based authentication
     'users', # the user app for its authentication
-    'corsheaders' # cros origin header
+    'corsheaders', # cros origin header
 ]
 
 MIDDLEWARE = [
@@ -163,3 +163,22 @@ REST_FRAMEWORK = {
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # Change this value to prolong the token expiry time
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    # 'ROTATE_REFRESH_TOKENS': False,
+    # 'BLACKLIST_AFTER_ROTATION': True,
+    # 'ALGORITHM': 'HS256',
+    # 'SIGNING_KEY': settings.SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    # 'USER_ID_FIELD': 'id',
+    # 'USER_ID_CLAIM': 'user_id',
+    # 'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    # 'TOKEN_TYPE_CLAIM': 'token_type',
+    # 'JTI_CLAIM': 'jti',
+}
+

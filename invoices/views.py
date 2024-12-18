@@ -8,5 +8,8 @@ class UnifiedModelViewSet(viewsets.ModelViewSet):
     serializer_class = UnifiedModelSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)  # Filter invoices by authenticated user
+
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

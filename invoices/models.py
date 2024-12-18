@@ -7,7 +7,7 @@ class UnifiedModel(models.Model):
 
     # Common fields
     name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField(unique=False, null=True, blank=True)
     address = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
 
